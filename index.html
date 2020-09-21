@@ -68,75 +68,82 @@
     </style>
     <script src="./jquery-1.11.1.js"></script>
     <script>
-        $(document).ready(() => {
-            let index = 0
-            $(".right").click(function () {
-                $("ul").animate({ marginLeft: "-590px" }, 500, function () {
+
+    $(document).ready(() => {
+        let clientWidth = document.documentElement.clientWidth
+        let html = document.querySelector("html")
+        html.style.fontSize = clientWidth / 4.14 + "px"
+        let imgWidth = $("img").get(0).clientWidth
+        console.log(imgWidth);
+        let index = 0
+        $(".right").click(function () {
+            $("ul").animate({ marginLeft: -imgWidth + "px" }, 500, function () {
+                $("li").slice(0, 1).appendTo($("ul"))
+                $("ul").css("marginLeft", "0px")
+            })
+            index++
+            if (index >= 4) {
+                index = 0
+            }
+            $(".point span").eq(index).addClass("active").siblings().removeClass("active")
+        })
+        $(".left").click(function () {
+            $("li").slice($("li").length - 1).prependTo($("ul"))
+            $("ul").css("marginLeft", -imgWidth + "px")
+            $("ul").animate({ marginLeft: "0px" }, 500)
+            index--
+            if (index < 0) {
+                index = 3
+            }
+            $(".point span").eq(index).addClass("active").siblings().removeClass("active")
+        })
+        let time = setInterval(() => {
+            $("ul").animate({ marginLeft: -imgWidth + "px" }, 500, function () {
+                $("li").slice(0, 1).appendTo($("ul"))
+                $("ul").css("marginLeft", "0px")
+                index++
+                if (index >= 4) {
+                    index = 0
+                }
+                $(".point span").eq(index).addClass("active").siblings().removeClass("active")
+            })
+        }, 2000)
+        $(".point span").click(function () {
+            let i = $(this).index()
+            if (i > index) {
+                $("ul").animate({ marginLeft: -imgWidth * (i - index) + "px" }, 500, function () {
+                    $("li").slice(0, i - index).appendTo($("ul"))
+                    index = i
+                    $("ul").css("marginLeft", "0px")
+                })
+            } else {
+                $("li").slice($("li").length - (index - i)).prependTo($("ul"))
+                $("ul").css("marginLeft", -imgWidth * (index - i) + "px")
+                $("ul").animate({ marginLeft: "0px" }, 500)
+                index = i
+            }
+            $(".point span").eq(i).addClass("active").siblings().removeClass("active")
+        })
+        $(".container").mouseover(function () {
+            clearInterval(time)
+        })
+        $(".container").mouseout(function () {
+            time = setInterval(() => {
+                $("ul").animate({ marginLeft: -imgWidth + "px" }, 500, function () {
                     $("li").slice(0, 1).appendTo($("ul"))
                     $("ul").css("marginLeft", "0px")
                 })
                 index++
-                if (index >= 5) {
+                if (index >= 4) {
                     index = 0
                 }
-                $("span").eq(index).addClass("active").siblings().removeClass("active")
-            })
-            $(".left").click(function () {
-                $("li").slice($("li").length - 1).prependTo($("ul"))
-                $("ul").css("marginLeft", "-590px")
-                $("ul").animate({ marginLeft: "0px" }, 500)
-                index--
-                if (index < 0) {
-                    index = 4
-                }
-                $("span").eq(index).addClass("active").siblings().removeClass("active")
-            })
-            let time = setInterval(() => {
-                $("ul").animate({ marginLeft: "-590px" }, 500, function () {
-                    $("li").slice(0, 1).appendTo($("ul"))
-                    $("ul").css("marginLeft", "0px")
-                    index++
-                    if (index >= 5) {
-                        index = 0
-                    }
-                    $("span").eq(index).addClass("active").siblings().removeClass("active")
-                })
+                $(".point span").eq(index).addClass("active").siblings().removeClass("active")
             }, 2000)
-            $("span").click(function () {
-                let i = $(this).index()
-                if (i > index) {
-                    $("ul").animate({ marginLeft: -590 * (i - index) + "px" }, 500, function () {
-                        $("li").slice(0, i - index).appendTo($("ul"))
-                        index = i
-                        $("ul").css("marginLeft", "0px")
-                    })
-                } else {
-                    $("li").slice($("li").length - (index - i)).prependTo($("ul"))
-                    $("ul").css("marginLeft", -590 * (index - i) + "px")
-                    $("ul").animate({ marginLeft: "0px" }, 500)
-                    index = i
-                }
-                $("span").eq(i).addClass("active").siblings().removeClass("active")
-
-            })
-            $(".container").mouseover(function () {
-                clearInterval(time)
-            })
-            $(".container").mouseout(function () {
-                time = setInterval(() => {
-                    $("ul").animate({ marginLeft: "-590px" }, 500, function () {
-                        $("li").slice(0, 1).appendTo($("ul"))
-                        $("ul").css("marginLeft", "0px")
-                    })
-                    index++
-                    if (index >= 5) {
-                        index = 0
-                    }
-                    $("span").eq(index).addClass("active").siblings().removeClass("active")
-                }, 2000)
-            })
         })
-    </script>
+    })
+</script>
+
+    
 </head>
 <body>
     <div class="container">
