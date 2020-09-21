@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 590px;
+            height: 470px;
+            border: 1px solid black;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+        }
+        ul {
+            width: 2950px;
+            list-style-type: none;
+        }
+        li {
+            float: left;
+            width: 590px;
+            height: 470px;
+        }
+        .btn-box {
+            position: absolute;
+            top: 200px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .left,
+        .right {
+            width: 40px;
+            height: 40px;
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.2);
+            text-align: center;
+            line-height: 40px;
+            font-size: 24px;
+        }
+        .point {
+            position: absolute;
+            display: flex;
+            justify-content: space-between;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            bottom: 20px;
+            width: 129px;
+            background-color: rgba(0, 0, 0, );
+        }
+        span {
+            width: 13px;
+            height: 13px;
+            background-color: rgba(0, 0, 0, .9);
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .active {
+            background-color: #fff;
+        }
+    </style>
+    <script src="./jquery-1.11.1.js"></script>
+    <script>
+
+    $(document).ready(() => {
+        let clientWidth = document.documentElement.clientWidth
+        let html = document.querySelector("html")
+        html.style.fontSize = clientWidth / 4.14 + "px"
+        let imgWidth = $("img").get(0).clientWidth
+        console.log(imgWidth);
+        let index = 0
+        $(".right").click(function () {
+            $("ul").animate({ marginLeft: -imgWidth + "px" }, 500, function () {
+                $("li").slice(0, 1).appendTo($("ul"))
+                $("ul").css("marginLeft", "0px")
+            })
+            index++
+            if (index >= 4) {
+                index = 0
+            }
+            $(".point span").eq(index).addClass("active").siblings().removeClass("active")
+        })
+        $(".left").click(function () {
+            $("li").slice($("li").length - 1).prependTo($("ul"))
+            $("ul").css("marginLeft", -imgWidth + "px")
+            $("ul").animate({ marginLeft: "0px" }, 500)
+            index--
+            if (index < 0) {
+                index = 3
+            }
+            $(".point span").eq(index).addClass("active").siblings().removeClass("active")
+        })
+        let time = setInterval(() => {
+            $("ul").animate({ marginLeft: -imgWidth + "px" }, 500, function () {
+                $("li").slice(0, 1).appendTo($("ul"))
+                $("ul").css("marginLeft", "0px")
+                index++
+                if (index >= 4) {
+                    index = 0
+                }
+                $(".point span").eq(index).addClass("active").siblings().removeClass("active")
+            })
+        }, 2000)
+        $(".point span").click(function () {
+            let i = $(this).index()
+            if (i > index) {
+                $("ul").animate({ marginLeft: -imgWidth * (i - index) + "px" }, 500, function () {
+                    $("li").slice(0, i - index).appendTo($("ul"))
+                    index = i
+                    $("ul").css("marginLeft", "0px")
+                })
+            } else {
+                $("li").slice($("li").length - (index - i)).prependTo($("ul"))
+                $("ul").css("marginLeft", -imgWidth * (index - i) + "px")
+                $("ul").animate({ marginLeft: "0px" }, 500)
+                index = i
+            }
+            $(".point span").eq(i).addClass("active").siblings().removeClass("active")
+        })
+        $(".container").mouseover(function () {
+            clearInterval(time)
+        })
+        $(".container").mouseout(function () {
+            time = setInterval(() => {
+                $("ul").animate({ marginLeft: -imgWidth + "px" }, 500, function () {
+                    $("li").slice(0, 1).appendTo($("ul"))
+                    $("ul").css("marginLeft", "0px")
+                })
+                index++
+                if (index >= 4) {
+                    index = 0
+                }
+                $(".point span").eq(index).addClass("active").siblings().removeClass("active")
+            }, 2000)
+        })
+    })
+</script>
+
+    
+</head>
+<body>
+    <div class="container">
+        <div class="btn-box">
+            <div class="left">&lt;</div>
+            <div class="right">&gt;</div>
+        </div>
+        <ul>
+            <li><img src="./images/1.jpg" alt=""></li>
+            <li><img src="./images/2.jpg" alt=""></li>
+            <li><img src="./images/3.jpg" alt=""></li>
+            <li><img src="./images/4.jpg" alt=""></li>
+            <li><img src="./images/5.jpg" alt=""></li>
+        </ul>
+        <div class="point">
+            <span class="active"></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</body>
+
+</html>
